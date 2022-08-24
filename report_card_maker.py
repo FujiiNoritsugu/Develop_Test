@@ -15,10 +15,53 @@ def main(input_csv):
         student_dic = _make_student_dic(lines)
         # 各生徒の教科毎の平均点を算出する
         average_dic = _make_average_dic(student_dic)
-        print(average_dic)
+        # print(average_dic)
+        # 各生徒の教科毎の順位を算出する
+        rank_dic = _make_rank_dic(average_dic)
+        print(rank_dic)
+
     except Exception:
         print('エラーが発生しました。')
         print(traceback.format_exc())
+
+
+def _make_rank_dic(average_dic):
+    """各生徒の教科毎の順位を算出する
+
+    Args:
+        average_dic (_type_): _description_
+    """
+    # キーを教科、値をキーが生徒、値が平均値のディクショナリのリストに変換する
+    rank_dic = {}
+    for student, subject_dic in average_dic.items():
+        for subject, average in subject_dic.items():
+            if subject not in rank_dic:
+                rank_dic[subject] = []
+            rank_dic[subject].append({'student': student, 'average': average})
+
+    # 教科毎に平均値で並べ替える
+    rank_dic = _sort_rank_dic(rank_dic)
+
+    return rank_dic
+
+
+def _sort_rank_dic(rank_dic):
+    """教科毎に平均値で並べ替える
+
+    Args:
+        rank_dic (_type_): _description_
+    """
+    for subject, average_list in rank_dic.items():
+        average_list = sorted(
+            average_list,
+            key=lambda x: x['average'],
+            reverse=True)
+
+        # average_listに「rank」項目を追加する
+        for index, average_dic in enumerate(average_list):
+            average_dic['rank'] = index + 1
+
+    return rank_dic
 
 
 def _make_average_dic(student_dic):
