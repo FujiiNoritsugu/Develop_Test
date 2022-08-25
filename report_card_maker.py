@@ -56,7 +56,7 @@ def _output_report_card(student_dic, average_dic, rank_dic):
                 subject_grade = _make_grade(subject_rank)
                 subject_judge = _make_judge(subject_grade, subject_point)
                 f.write(
-                    f'{subject_str},{subject_average},{subject_rank},{subject_grade},{subject_judge}\n')
+                    f'{subject_str},{subject_average:.1f},{subject_rank},{subject_grade},{subject_judge}\n')
 
 
 def _make_judge(grade, points):
