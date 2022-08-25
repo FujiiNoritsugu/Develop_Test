@@ -37,13 +37,71 @@ def _output_report_card(student_dic, average_dic, rank_dic):
         average_dic (_type_): 生徒/教科と平均点
         rank_dic (_type_): 生徒/教科と順位
     """
-    REPORT_CARD_HEADER = '教科,平均点,順位,成績,判定'
+    REPORT_CARD_HEADER = '教科,平均点,順位,成績,判定\n'
     SUBJECT_DIC = {'1': '国語', '2': '数学', '3': '理科', '4': '社会', '5': '英語'}
 
     for student_no, point_data in student_dic.items():
         average_data = average_dic[student_no]
         rank_data = rank_dic[student_no]
-        with open(f"生徒{student_no}.csv", mode="w") as f:
+        with open(f"生徒{student_no}.csv", mode="w", encoding="shift_jis") as f:
+            # ヘッダの書き込み
+            f.write(REPORT_CARD_HEADER)
+            # 教科毎のデータの取得・出力
+            for index in range(1, 6):
+                subject = str(index)
+                subject_str = SUBJECT_DIC[subject]
+                subject_point = point_data[subject]
+                subject_average = average_data[subject]
+                subject_rank = rank_data[subject]
+                subject_grade = _make_grade(subject_rank)
+                subject_judge = _make_judge(subject_grade, subject_point)
+                f.write(
+                    f'{subject_str},{subject_average},{subject_rank},{subject_grade},{subject_judge}\n')
+
+
+def _make_judge(grade, points):
+    """判定文字列を作成する
+
+    Args:
+        rank (_type_): _description_
+    """
+    result = None
+    # 点数に10点より下の点数が一つでもあるか判定
+    is_failure = any((data < 10 for data in points))
+    # 点数に30点以下の点数が三回以上あるか判定
+    is_retest = True if sum((data <= 30 for data in points)) >= 3 else False
+
+    if is_failure or grade == 'E':
+        result = '不合格'
+    elif is_retest or grade == 'D':
+        result = '再テスト'
+    elif grade in ('A', 'B', 'C'):
+        result = '合格'
+
+    return result
+
+
+def _make_grade(rank):
+    """成績を付ける
+
+    Args:
+        rank (_type_): 順位
+    """
+    # 順位の数値にする
+    rank = int(rank)
+    result = None
+    if rank == 1:
+        result = 'A'
+    elif rank == 2 or rank == 3:
+        result = 'B'
+    elif 4 <= rank <= 7:
+        result = 'C'
+    elif rank == 8 or rank == 9:
+        result = 'D'
+    elif rank == 10:
+        result = 'E'
+
+    return result
 
 
 def _make_rank_dic(average_dic):
