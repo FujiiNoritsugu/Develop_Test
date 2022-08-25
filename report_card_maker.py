@@ -11,14 +11,17 @@ def main(input_csv):
         with open(input_csv) as f:
             # 末尾の改行を削除しておく
             lines = [s.strip() for s in f.readlines()]
+
         # 入力ファイルを読み込んでキー：生徒番号、値：(キー：教科　値：点数のリスト)にして返却する
         student_dic = _make_student_dic(lines)
+
         # 各生徒の教科毎の平均点を算出する
         average_dic = _make_average_dic(student_dic)
+
         # print(average_dic)
         # 各生徒の教科毎の順位を算出する
         rank_dic = _make_rank_dic(average_dic)
-        print(rank_dic)
+        # print(rank_dic)
 
     except Exception:
         print('エラーが発生しました。')
@@ -42,7 +45,24 @@ def _make_rank_dic(average_dic):
     # 教科毎に平均値で並べ替える
     rank_dic = _sort_rank_dic(rank_dic)
 
+    # 再度、キーが生徒、値が（キーが教科、値が教科毎の順位のディクショナリ)に変換する
+    rank_dic = _convert_rank(rank_dic)
+
     return rank_dic
+
+
+def _convert_rank(rank_dic):
+
+    result_dic = {}
+    for subject, data_list in rank_dic.items():
+        for data in data_list:
+            student = data['student']
+            rank = data['rank']
+            if student not in result_dic:
+                result_dic[student] = {}
+            result_dic[student][subject] = rank
+
+    return result_dic
 
 
 def _sort_rank_dic(rank_dic):
@@ -60,7 +80,7 @@ def _sort_rank_dic(rank_dic):
         # average_listに「rank」項目を追加する
         for index, average_dic in enumerate(average_list):
             average_dic['rank'] = index + 1
-
+        rank_dic[subject] = average_list
     return rank_dic
 
 
