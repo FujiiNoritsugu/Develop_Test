@@ -18,14 +18,32 @@ def main(input_csv):
         # 各生徒の教科毎の平均点を算出する
         average_dic = _make_average_dic(student_dic)
 
-        # print(average_dic)
         # 各生徒の教科毎の順位を算出する
         rank_dic = _make_rank_dic(average_dic)
-        # print(rank_dic)
+
+        # 通知簿の出力を行う
+        _output_report_card(student_dic, average_dic, rank_dic)
 
     except Exception:
         print('エラーが発生しました。')
         print(traceback.format_exc())
+
+
+def _output_report_card(student_dic, average_dic, rank_dic):
+    """通知簿の出力を行う
+
+    Args:
+        student_dic (_type_): 生徒/教科と点数のリスト
+        average_dic (_type_): 生徒/教科と平均点
+        rank_dic (_type_): 生徒/教科と順位
+    """
+    REPORT_CARD_HEADER = '教科,平均点,順位,成績,判定'
+    SUBJECT_DIC = {'1': '国語', '2': '数学', '3': '理科', '4': '社会', '5': '英語'}
+
+    for student_no, point_data in student_dic.items():
+        average_data = average_dic[student_no]
+        rank_data = rank_dic[student_no]
+        with open(f"生徒{student_no}.csv", mode="w") as f:
 
 
 def _make_rank_dic(average_dic):
