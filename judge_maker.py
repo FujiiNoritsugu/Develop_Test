@@ -8,7 +8,7 @@ def make_judge(grade, points):
     if grade not in ('A', 'B', 'C', 'D', 'E'):
         raise Exception('gradeがA～Eの文字でありません')
     # pointsが0～100の数値の10個のリストでなかった場合、例外を発生させる
-    if not (isinstance(points, list) and len(list) == 10 and all(
+    if not (isinstance(points, list) and len(points) == 10 and all(
             [isinstance(a, int) and 0 <= a <= 100 for a in points])):
         raise Exception('pointsが整数値0～100のリストでありません')
     result = None
