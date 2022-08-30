@@ -1,5 +1,6 @@
 attrs==22.1.0
 autopep8==1.7.0
+coverage==6.4.4
 flake8==5.0.4
 iniconfig==1.1.1
 mccabe==0.7.0
@@ -12,6 +13,7 @@ pycodestyle==2.9.1
 pyflakes==2.5.0
 pyparsing==3.0.9
 pytest==7.1.2
+pytest-cov==3.0.0
 python-dateutil==2.8.2
 pytz==2022.2.1
 six==1.16.0
