@@ -5,12 +5,11 @@ def make_judge(grade, points):
         rank (_type_): _description_
     """
     # gradeがA～Eの文字以外であった場合、例外を発生させる
-    if grade not in ('A', 'B', 'C', 'D', 'E'):
-        raise Exception('gradeがA～Eの文字でありません')
+    _check_grade(grade)
+
     # pointsが0～100の数値の10個のリストでなかった場合、例外を発生させる
-    if not (isinstance(points, list) and len(points) == 10 and all(
-            [isinstance(a, int) and 0 <= a <= 100 for a in points])):
-        raise Exception('pointsが整数値0～100のリストでありません')
+    _check_points(points)
+
     result = None
     # 点数に10点より下の点数が一つでもあるか判定
     is_failure = any((data < 10 for data in points))
@@ -25,3 +24,24 @@ def make_judge(grade, points):
         result = 1
 
     return result
+
+
+def _check_grade(grade):
+    """gradeがA～Eの文字以外であった場合、例外を発生させる
+
+    Args:
+        grade (_type_): 成績
+    """
+    if grade not in ('A', 'B', 'C', 'D', 'E'):
+        raise Exception('gradeがA～Eの文字でありません')
+
+
+def _check_points(points):
+    """pointsが0～100の数値の10個のリストでなかった場合、例外を発生させる
+
+    Args:
+        points (_type_): 点数のリスト
+    """
+    if not (isinstance(points, list) and len(points) == 10 and all(
+            [isinstance(a, int) and 0 <= a <= 100 for a in points])):
+        raise Exception('pointsが整数値0～100のリストでありません')
