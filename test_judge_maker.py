@@ -85,3 +85,14 @@ def test_make_judge_e2():
         assert False
     except Exception as e:
         assert e.args[0] == 'pointsが整数値0～100のリストでありません'
+
+
+def test_make_judge_e3():
+    """異常系３
+    pointsが整数値0～100の10個のリストでなかった場合
+    """
+    try:
+        make_judge('A', [1, 2, 3, 4, 5, 6, 7, 8, 9])
+        assert True
+    except Exception as e:
+        print(e.args[0])
